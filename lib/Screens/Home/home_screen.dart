@@ -1,27 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:greenroots/Screens/Home/components/body.dart';
+import 'package:greenroots/components/bottom_nav_bar.dart';
 import 'package:greenroots/constants.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: kPrimaryColor,
-        leading: IconButton(
-          icon: Icon(Icons.menu_rounded),
-          onPressed: () {},
+      appBar: buildAppBar(),
+      body: Body(),
+      bottomNavigationBar: BottomNavBar(),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: kPrimaryLightColor,
+      leading: IconButton(
+        icon: Icon(
+          LineIcons.bars,
+          color: kPrimaryColor,
+          size: 24,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.shopping_cart_rounded),
-          ),
-        ],
+        onPressed: () {},
       ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            LineIcons.shoppingCart,
+            color: kPrimaryColor,
+            size: 32,
+          ),
+        ),
+      ],
     );
   }
 }

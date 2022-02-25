@@ -27,12 +27,12 @@ class LoginService {
       }
       return APIResponse<LoginCredentials>(
         error: true,
-        errorMessage: "An error occured",
+        errorMessage: "An error occurred",
       );
     }).catchError(
       (_) => APIResponse<LoginCredentials>(
         error: true,
-        errorMessage: "An error occured",
+        errorMessage: "An error occurred",
       ),
     );
   }
@@ -48,8 +48,8 @@ class LoginService {
       if (data.statusCode == 201) {
         return APIResponse<bool>(data: true);
       }
-      return APIResponse<bool>(error: true, errorMessage: 'An error occured');
+      return APIResponse<bool>(error: true, errorMessage: 'An error occurred');
     }).catchError((_) =>
-            APIResponse<bool>(error: true, errorMessage: 'An error occured'));
+            APIResponse<bool>(error: true, errorMessage: 'An error occurred'));
   }
 }

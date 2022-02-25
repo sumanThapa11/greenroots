@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:greenroots/components/rounded_back_button.dart';
 import 'package:greenroots/Screens/Signup/components/background.dart';
 import 'package:greenroots/components/rectangular_input_field.dart';
 import 'package:greenroots/components/rectangular_password_field.dart';
@@ -48,29 +49,8 @@ class _BodyState extends State<Body> {
                     child: Container(
                       margin: EdgeInsets.only(top: 15, left: 15),
                       alignment: Alignment.topLeft,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 18,
-                          color: kPrimaryColor,
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(kPrimaryLightColor),
-                          shape: MaterialStateProperty.all(
-                            CircleBorder(),
-                          ),
-                          shadowColor: MaterialStateProperty.all(Colors.white),
-                          side: MaterialStateProperty.all(
-                            BorderSide(color: Colors.white),
-                          ),
-                          minimumSize: MaterialStateProperty.all(
-                            Size(40, 40),
-                          ),
-                        ),
+                      child: RoundedBackButton(
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -166,7 +146,7 @@ class _BodyState extends State<Body> {
                         String firstName;
                         String lastName;
 
-                        // providing blank text if th users supply first name only
+                        // providing blank text if the users supply first name only
                         if (_nameController.text.split(" ").length > 1) {
                           firstName = _nameController.text.split(" ")[0];
                           lastName = _nameController.text.split(" ")[1];
