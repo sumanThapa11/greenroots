@@ -6,6 +6,7 @@ import 'package:greenroots/models/plant_list.dart';
 import 'package:http/http.dart' as http;
 
 class PlantsService {
+  // static const API = 'http://192.168.1.69:8000/api/';
   static const API = 'http://10.0.2.2:8000/api/';
 
   Future<APIResponse<List<CategoryList>>> getCategoryList() {

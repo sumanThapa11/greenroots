@@ -37,7 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed('/cart');
+          },
           icon: Icon(
             LineIcons.shoppingCart,
             color: kPrimaryColor,

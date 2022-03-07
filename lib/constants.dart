@@ -12,3 +12,12 @@ const Widget kCircularProgressIndicator = Center(
     color: kPrimaryLightColor,
   ),
 );
+
+const SnackBar kErrorSnackBar = SnackBar(
+  content: Text(
+    "An error occurred",
+    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+  ),
+  duration: Duration(seconds: 4),
+  backgroundColor: Colors.red,
+);

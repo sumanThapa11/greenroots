@@ -25,6 +25,7 @@ class _BodyState extends State<Body> {
 
   String? errorMessage;
   late PlantList plant;
+  Map<String, dynamic> plantForCart = {};
 
   bool _showSpinner = false;
 
@@ -44,6 +45,7 @@ class _BodyState extends State<Body> {
         errorMessage = response.errorMessage ?? 'An error occurred';
       }
       plant = response.data!;
+      plantForCart = plant.toJson();
     });
   }
 
@@ -177,7 +179,10 @@ class _BodyState extends State<Body> {
                     color: Colors.white,
                     height: 24,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed('/addToCart', arguments: plantForCart);
+                  },
                   label: Text(
                     "Add to cart",
                     style: TextStyle(fontSize: 17, color: Colors.white),

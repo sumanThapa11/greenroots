@@ -22,7 +22,9 @@ class PlantDetailsScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed('/cart');
+            },
             icon: Icon(
               LineIcons.shoppingCart,
               color: kPrimaryColor,

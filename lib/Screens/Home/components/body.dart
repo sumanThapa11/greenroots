@@ -51,6 +51,7 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
 
     final imageUrl = "http://10.0.2.2:8000";
+    // final imageUrl = "http://192.168.1.69:8000";
     return SingleChildScrollView(
       child: _showSpinner
           ? kCircularProgressIndicator

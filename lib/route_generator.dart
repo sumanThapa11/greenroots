@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:greenroots/Screens/Cart/add_to_cart_screen.dart';
+import 'package:greenroots/Screens/Cart/cart_screen.dart';
 import 'package:greenroots/Screens/CategorysPlants/categorys_plants_screen.dart';
+import 'package:greenroots/Screens/Checkout/checkout_screen.dart';
 
 import 'package:greenroots/Screens/Home/home_screen.dart';
 import 'package:greenroots/Screens/Login/login_screen.dart';
@@ -8,6 +10,7 @@ import 'package:greenroots/Screens/PlantDetails/plant_details_screen.dart';
 import 'package:greenroots/Screens/Signup/signup_screen.dart';
 import 'package:greenroots/main.dart';
 import 'package:greenroots/models/plant_list.dart';
+import 'package:greenroots/models/users_cart_items.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -38,6 +41,17 @@ class RouteGenerator {
         if (args is Map<String, dynamic>) {
           return MaterialPageRoute(
             builder: (_) => AddToCartScreen(plant: args),
+          );
+        }
+        return _errorRoute();
+      case '/cart':
+        return MaterialPageRoute(builder: (_) => CartScreen());
+      case '/checkout':
+        if (args is UsersCartItem) {
+          return MaterialPageRoute(
+            builder: (_) => CheckoutScreen(
+              usersCartItem: args,
+            ),
           );
         }
         return _errorRoute();
