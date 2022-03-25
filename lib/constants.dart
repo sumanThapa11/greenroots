@@ -21,3 +21,6 @@ const SnackBar kErrorSnackBar = SnackBar(
   duration: Duration(seconds: 4),
   backgroundColor: Colors.red,
 );
+
+// const String kImageUrl = "http://192.168.1.69:8000";
+const String kImageUrl = "http://10.0.2.2:8000";

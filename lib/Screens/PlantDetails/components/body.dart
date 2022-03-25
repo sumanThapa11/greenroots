@@ -1,15 +1,21 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:greenroots/components/text_field_container.dart';
 import 'package:greenroots/constants.dart';
+import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/services/plants_service.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:greenroots/models/plant_list.dart';
+import 'package:geolocator/geolocator.dart';
+
+const weatherApiKey = '19f9849b916a6b5ad3839530a8ed6e6b';
 
 class Body extends StatefulWidget {
   const Body({Key? key, required this.plantId}) : super(key: key);
@@ -26,10 +32,13 @@ class _BodyState extends State<Body> {
   String? errorMessage;
   late PlantList plant;
   Map<String, dynamic> plantForCart = {};
-
+  double? currentTemperature;
+  String? isSuitableForLocation;
   bool _showSpinner = false;
+  late APIResponse _apiResponse;
+  bool isSuitableCheck = false;
 
-  String imageUrl = "http://10.0.2.2:8000";
+  // String imageUrl = "http://10.0.2.2:8000";
 
   @override
   void initState() {
@@ -37,21 +46,75 @@ class _BodyState extends State<Body> {
     setState(() {
       _showSpinner = true;
     });
+
+    isSuitable();
     plantService.getPlant(widget.plantId).then((response) {
-      setState(() {
-        _showSpinner = false;
-      });
       if (response.error) {
         errorMessage = response.errorMessage ?? 'An error occurred';
       }
       plant = response.data!;
       plantForCart = plant.toJson();
+
+      print(double.parse(plant.suitableTemperature.substring(0, 2)) > 0);
     });
+  }
+
+  void isSuitable() async {
+    double temp = await getLocationTemperature();
+    double minTemp = double.parse(plant.suitableTemperature.substring(0, 2));
+    double maxTemp = double.parse(plant.suitableTemperature.substring(3));
+    // try {
+    //   minTemp = double.parse(plant.suitableTemperature.substring(0, 2));
+    // } catch (error) {
+    //   minTemp = double.parse(plant.suitableTemperature.substring(0, 1));
+    //   maxTemp = double.parse(plant.suitableTemperature.substring(2));
+    // }
+
+    print(minTemp);
+    print(maxTemp);
+    print(temp);
+    if (temp > minTemp && temp < maxTemp) {
+      isSuitableForLocation = "*suitable for 📍";
+    } else {
+      isSuitableCheck = true;
+      isSuitableForLocation = "*not suitable for 📍";
+    }
+    setState(() {
+      _showSpinner = false;
+    });
+  }
+
+  Future<double> getLocationTemperature() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      print('please enable location services');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('permission denied');
+      }
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.low);
+
+    _apiResponse = await plantService.getTemperature(
+        position.latitude, position.longitude);
+    currentTemperature = _apiResponse.data!;
+    print('temp');
+    print(currentTemperature);
+    return currentTemperature!;
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return _showSpinner
         ? Center(
             child: CircularProgressIndicator(
@@ -68,7 +131,7 @@ class _BodyState extends State<Body> {
                     width: double.infinity,
                     height: size.height / 2.5,
                     child: Image.network(
-                      imageUrl + plant.image,
+                      kImageUrl + plant.image,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -144,8 +207,23 @@ class _BodyState extends State<Body> {
                   ),
                 ],
               ),
+              Container(
+                padding: EdgeInsets.only(right: 20, top: 5),
+                alignment: Alignment.topRight,
+                child: isSuitableCheck
+                    ? Text(
+                        "$isSuitableForLocation",
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Text(
+                        "$isSuitableForLocation",
+                        style: TextStyle(
+                            color: kSecondaryColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+              ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20),

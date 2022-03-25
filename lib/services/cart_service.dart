@@ -12,7 +12,7 @@ class CartService {
   static const headers = {
     'Content-Type': 'application/json',
     'Authorization':
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ2Njc0ODY0LCJpYXQiOjE2NDY2NjUyNjQsImp0aSI6ImU1MjY1NzE2MmZjZTRmZWVhOWExNDgxNjZmMjU4MzFlIiwidXNlcl9pZCI6Mn0.VQ_aIWrlQX7wj5sEaRacO1JXmY4n1J9gdw4PkCNTB2A'
+        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ4MjAxNjk1LCJpYXQiOjE2NDgxOTIwOTUsImp0aSI6ImQ2Mzg3NWYyNjExMTRjMjRhOWUzMTFiM2U3OGU3OGIzIiwidXNlcl9pZCI6Mn0.VXLX0GR4SKLOJQmie-hjkS9L1N949qIS-b4IB7EGgIo'
   };
 
   Future<APIResponse<bool>> createCart() {

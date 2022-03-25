@@ -1,46 +1,41 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:greenroots/constants.dart';
-import 'package:greenroots/models/category_list.dart';
+import 'package:greenroots/models/api_response.dart';
+import 'package:greenroots/models/plant_list.dart';
 import 'package:greenroots/services/plants_service.dart';
-import 'package:line_icons/line_icon.dart';
 
 class Body extends StatefulWidget {
-  const Body({Key? key, required this.plantId}) : super(key: key);
-
-  final String plantId;
+  const Body({Key? key}) : super(key: key);
 
   @override
   State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  PlantsService get plantService => GetIt.I<PlantsService>();
+  PlantsService get service => GetIt.I<PlantsService>();
 
-  String? errorMessage;
-  late CategoryList category;
-
-  String imageUrl = "http://192.168.1.69:8000";
-
+  late APIResponse<List<PlantList>> _apiResponse;
   bool _showSpinner = false;
+
+  String imageUrl = "http://10.0.2.2:8000";
 
   @override
   void initState() {
+    _fetchUserPlants();
+    super.initState();
+  }
+
+  _fetchUserPlants() async {
     setState(() {
       _showSpinner = true;
     });
 
-    plantService.getCategory(widget.plantId).then((response) {
-      setState(() {
-        _showSpinner = false;
-      });
-      if (response.error) {
-        errorMessage = response.errorMessage ?? 'An error occurred';
-      }
-      category = response.data!;
+    _apiResponse = await service.getMyPlants();
+
+    setState(() {
+      _showSpinner = false;
     });
-    super.initState();
   }
 
   @override
@@ -51,7 +46,7 @@ class _BodyState extends State<Body> {
         if (_showSpinner) {
           return kCircularProgressIndicator;
         }
-        if (category.plants.length == 0) {
+        if (_apiResponse.data!.length == 0) {
           return Center(
             child: Text(
               "No plants available",
@@ -64,7 +59,7 @@ class _BodyState extends State<Body> {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed('/plantDetails',
-                      arguments: category.plants[index]['id'].toString());
+                      arguments: _apiResponse.data![index].id.toString());
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),
@@ -83,7 +78,7 @@ class _BodyState extends State<Body> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            kImageUrl + category.plants[index]['image'],
+                            imageUrl + _apiResponse.data![index].image,
                           ),
                         ),
                       ),
@@ -92,33 +87,24 @@ class _BodyState extends State<Body> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            category.plants[index]['name'],
+                            _apiResponse.data![index].name,
                             style:
                                 TextStyle(color: kPrimaryColor, fontSize: 18),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 20,
                           ),
                           Row(
                             children: [
                               Text(
-                                "NPR " + category.plants[index]['unit_price'],
+                                "Suitable at " +
+                                    _apiResponse
+                                        .data![index].suitableTemperature,
                                 style: TextStyle(
                                     color: kSecondaryColor, fontSize: 14),
                               ),
                               SizedBox(
                                 width: 60,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed('/addToCart',
-                                      arguments: category.plants[index]);
-                                },
-                                child: Text(
-                                  "Add to cart",
-                                  style: TextStyle(
-                                      color: kPrimaryColor, fontSize: 14),
-                                ),
                               ),
                             ],
                           ),
@@ -129,7 +115,7 @@ class _BodyState extends State<Body> {
                 ),
               );
             },
-            itemCount: category.plants.length);
+            itemCount: _apiResponse.data!.length);
       },
     );
   }

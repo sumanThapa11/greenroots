@@ -1,13 +1,20 @@
 import 'dart:convert';
 
+import 'package:greenroots/Screens/PlantDetails/components/body.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/category_list.dart';
 import 'package:greenroots/models/plant_list.dart';
+import 'package:greenroots/models/users_plant_insert.dart';
 import 'package:http/http.dart' as http;
 
 class PlantsService {
   // static const API = 'http://192.168.1.69:8000/api/';
   static const API = 'http://10.0.2.2:8000/api/';
+  static const headers = {
+    'Content-Type': 'application/json',
+    'Authorization':
+        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ4MjAxNjk1LCJpYXQiOjE2NDgxOTIwOTUsImp0aSI6ImQ2Mzg3NWYyNjExMTRjMjRhOWUzMTFiM2U3OGU3OGIzIiwidXNlcl9pZCI6Mn0.VXLX0GR4SKLOJQmie-hjkS9L1N949qIS-b4IB7EGgIo'
+  };
 
   Future<APIResponse<List<CategoryList>>> getCategoryList() {
     return http
@@ -88,6 +95,61 @@ class PlantsService {
     }).catchError(
       (_) => APIResponse<PlantList>(
           error: true, errorMessage: 'An error occurred'),
+    );
+  }
+
+  Future<APIResponse<List<PlantList>>> getMyPlants() {
+    return http
+        .get(Uri.parse(API + 'user/plant_details/'), headers: headers)
+        .then((data) {
+      if (data.statusCode == 200) {
+        final jsonData = json.decode(data.body);
+        final plants = <PlantList>[];
+        for (var item in jsonData) {
+          final plant = PlantList.fromJson(item);
+          plants.add(plant);
+        }
+        return APIResponse<List<PlantList>>(data: plants);
+      }
+      return APIResponse<List<PlantList>>(
+          error: true, errorMessage: 'An error occurred');
+    }).catchError(
+      (_) => APIResponse<List<PlantList>>(
+          error: true, errorMessage: 'An error occurred'),
+    );
+  }
+
+  Future<APIResponse<bool>> createUsersPlant(UsersPlantInsert plant) {
+    return http
+        .post(Uri.parse(API + 'user/plants/'),
+            headers: headers, body: json.encode(plant.toJson()))
+        .then((data) {
+      if (data.statusCode == 201) {
+        return APIResponse<bool>(data: true);
+      }
+      return APIResponse<bool>(error: true, errorMessage: 'An error occurred');
+    }).catchError((_) =>
+            APIResponse<bool>(error: true, errorMessage: 'An error occurred'));
+  }
+
+  Future<APIResponse<double>> getTemperature(
+      double latitude, double longitude) {
+    return http
+        .get(
+      Uri.parse(
+          'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$weatherApiKey&units=metric'),
+    )
+        .then((data) {
+      if (data.statusCode == 200) {
+        final jsonData = json.decode(data.body);
+        double temperature = jsonData['main']['temp'];
+        return APIResponse<double>(data: temperature);
+      }
+      return APIResponse<double>(
+          error: true, errorMessage: 'An error occurred');
+    }).catchError(
+      (_) =>
+          APIResponse<double>(error: true, errorMessage: 'An error occurred'),
     );
   }
 }

@@ -36,6 +36,10 @@ dependencies:
   google_fonts: ^2.3.1
   line_icons: ^2.0.1
   persistent_bottom_nav_bar: any
+  khalti_flutter: ^2.0.2
+  image_picker: ^0.8.4+10
+  path_provider: ^2.0.9
+  geolocator: ^8.2.0
 
 dev_dependencies:
   flutter_test:

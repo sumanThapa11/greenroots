@@ -6,7 +6,9 @@ import 'package:greenroots/Screens/Checkout/checkout_screen.dart';
 
 import 'package:greenroots/Screens/Home/home_screen.dart';
 import 'package:greenroots/Screens/Login/login_screen.dart';
+import 'package:greenroots/Screens/MyPlants/my_plants_screen.dart';
 import 'package:greenroots/Screens/PlantDetails/plant_details_screen.dart';
+import 'package:greenroots/Screens/PlantNotFound/plant_not_found.dart';
 import 'package:greenroots/Screens/Signup/signup_screen.dart';
 import 'package:greenroots/main.dart';
 import 'package:greenroots/models/plant_list.dart';
@@ -51,6 +53,17 @@ class RouteGenerator {
           return MaterialPageRoute(
             builder: (_) => CheckoutScreen(
               usersCartItem: args,
+            ),
+          );
+        }
+        return _errorRoute();
+      case '/myPlants':
+        return MaterialPageRoute(builder: (_) => MyPlantsScreen());
+      case '/plantNotFound':
+        if (args is List<String>) {
+          return MaterialPageRoute(
+            builder: (_) => PlantNotFoundScreen(
+              plantDetails: args,
             ),
           );
         }

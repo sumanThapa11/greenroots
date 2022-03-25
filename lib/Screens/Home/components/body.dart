@@ -50,7 +50,8 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    final imageUrl = "http://10.0.2.2:8000";
+    // final imageUrl = "http://10.0.2.2:8000";
+    final imageUrl = kImageUrl;
     // final imageUrl = "http://192.168.1.69:8000";
     return SingleChildScrollView(
       child: _showSpinner
@@ -62,7 +63,7 @@ class _BodyState extends State<Body> {
                   text: "Browse by categories",
                 ),
                 Container(
-                  height: 265,
+                  height: size.height / 2.20,
                   child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
@@ -87,12 +88,12 @@ class _BodyState extends State<Body> {
                 ),
                 TitleWithPadding(text: "Recent additions"),
                 Container(
-                  height: 280,
+                  height: 290,
                   child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return PlantCard(
-                          height: 75,
+                          height: size.height / 8,
                           image:
                               imageUrl + _apiResponsePlant.data![index].image,
                           title: _apiResponsePlant.data![index].name,

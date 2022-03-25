@@ -47,7 +47,9 @@ class PlantCard extends StatelessWidget {
           GestureDetector(
             onTap: press,
             child: Container(
-              height: height != null ? height : 55,
+              height: height != null
+                  ? height
+                  : size.height / 8.6, //14.5 in big phone
               padding: EdgeInsets.all(kDefaultPadding / 3),
               width: width != null ? width : size.width / 3,
               decoration: BoxDecoration(

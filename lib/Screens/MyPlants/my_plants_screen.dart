@@ -2,23 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:greenroots/components/rounded_back_button.dart';
 import 'package:greenroots/constants.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:greenroots/Screens/MyPlants/components/body.dart';
 
-import 'components/body.dart';
-
-class PlantDetailsScreen extends StatelessWidget {
-  const PlantDetailsScreen({Key? key, required this.plantId}) : super(key: key);
-
-  final String plantId;
+class MyPlantsScreen extends StatelessWidget {
+  const MyPlantsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(plantId);
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryLightColor,
         leading: RoundedBackButton(
           color: kPrimaryLightColor,
+        ),
+        title: Center(
+          child: Text(
+            "My Plants",
+            style: TextStyle(color: kPrimaryColor),
+          ),
         ),
         actions: [
           IconButton(
@@ -33,15 +34,8 @@ class PlantDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: SizedBox(
-          height: size.height - 75,
-          child: Body(
-            plantId: plantId,
-          ),
-        ),
-      ),
+      body: Body(),
     );
+    ;
   }
 }
