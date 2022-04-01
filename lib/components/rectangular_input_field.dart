@@ -9,15 +9,17 @@ class RectangularInputField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final TextEditingController? controller;
   final String? errorText;
+  final TextInputType? keyBoardType;
 
-  RectangularInputField({
-    Key? key,
-    required this.hintText,
-    this.icon = Icons.person,
-    this.controller,
-    required this.onChanged,
-    this.errorText,
-  }) : super(key: key);
+  RectangularInputField(
+      {Key? key,
+      required this.hintText,
+      this.icon = Icons.person,
+      this.controller,
+      required this.onChanged,
+      this.errorText,
+      this.keyBoardType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class RectangularInputField extends StatelessWidget {
         controller: controller,
 
         // enableSuggestions: true,
-        // keyboardType: TextInputType.visiblePassword,
+        keyboardType: keyBoardType == null ? TextInputType.text : keyBoardType,
         decoration: InputDecoration(
           icon: Icon(
             icon,

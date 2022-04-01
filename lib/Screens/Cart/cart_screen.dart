@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:greenroots/Screens/Cart/components/cart_item_delete_alert.dart';
+import 'package:greenroots/Screens/ErrorScreen/7_error.dart';
+import 'package:greenroots/Screens/ErrorScreen/connection_failed.dart';
 import 'package:greenroots/components/rounded_back_button.dart';
 import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/users_cart_items.dart';
@@ -17,7 +19,7 @@ class _CartScreenState extends State<CartScreen> {
   CartService get cartService => GetIt.I<CartService>();
   String? errorMessage;
   String? emptyCart;
-  late UsersCartItem usersCartItem;
+  UsersCartItem? usersCartItem;
   bool showSpinner = false;
 
   @override
@@ -55,6 +57,9 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Builder(
         builder: (_) {
+          if (usersCartItem == null) {
+            return Error2Screen();
+          }
           if (showSpinner) {
             return kCircularProgressIndicator;
           }
@@ -77,7 +82,7 @@ class _CartScreenState extends State<CartScreen> {
                         if (result) {
                           final deleteCartItem =
                               await cartService.deleteCartItem(
-                                  (usersCartItem.cartItems[index]['id'])
+                                  (usersCartItem!.cartItems[index]['id'])
                                       .toString());
 
                           var message;
@@ -101,6 +106,7 @@ class _CartScreenState extends State<CartScreen> {
                           );
                           return deleteCartItem.data ?? false;
                         }
+
                         return result;
                       },
                       background: Container(
@@ -115,12 +121,12 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       child: ListTile(
-                        title: Text(usersCartItem.cartItems[index]['plant']),
+                        title: Text(usersCartItem!.cartItems[index]['plant']),
                         subtitle: Text("Quantity - " +
-                            (usersCartItem.cartItems[index]['quantity'])
+                            (usersCartItem!.cartItems[index]['quantity'])
                                 .toString()),
                         trailing: Text("NPR " +
-                            (usersCartItem.cartItems[index]['total'])
+                            (usersCartItem!.cartItems[index]['total'])
                                 .toString()),
                       ),
                     );
@@ -130,7 +136,7 @@ class _CartScreenState extends State<CartScreen> {
                         height: 1,
                         color: kPrimaryColor,
                       ),
-                  itemCount: usersCartItem.cartItems.length),
+                  itemCount: usersCartItem!.cartItems.length),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Container(

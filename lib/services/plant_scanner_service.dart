@@ -9,8 +9,8 @@ import 'package:greenroots/models/plant_scanner_response.dart';
 import 'package:http/http.dart' as http;
 
 class PlantScannerService {
-  // static const API = 'http://192.168.1.69:8000/api/';
-  static const API = 'http://10.0.2.2:8000/api/';
+  static const API = 'http://192.168.1.69:8000/api/';
+  // static const API = 'http://10.0.2.2:8000/api/';
   static const headers = {
     'Content-Type': 'application/json',
     // 'Authorization':
@@ -27,8 +27,12 @@ class PlantScannerService {
         final jsonData = json.decode(data.body);
         final plantDetails = PlantScannerResponse.fromJson(jsonData);
         return APIResponse<PlantScannerResponse>(data: plantDetails);
-      } else if (data.statusCode == 204) {
-        return APIResponse<PlantScannerResponse>(errorMessage: 'negative');
+      } else if (data.statusCode == 202) {
+        print(data.body);
+        final jsonData = json.decode(data.body);
+        final plantDetails = PlantScannerResponse.fromJson(jsonData);
+        return APIResponse<PlantScannerResponse>(
+            data: plantDetails, errorMessage: 'negative');
       }
       return APIResponse<PlantScannerResponse>(
           error: true, errorMessage: 'An error occurred');

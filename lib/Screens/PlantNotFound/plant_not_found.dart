@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PlantNotFoundScreen extends StatelessWidget {
-  const PlantNotFoundScreen({Key? key, required this.plantDetails})
+  const PlantNotFoundScreen({Key? key, required this.plantName})
       : super(key: key);
-  final List<String> plantDetails;
+  final String plantName;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class PlantNotFoundScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "                       ",
+                    "           ",
                   ),
                   Text(
                     "plant details",
@@ -37,7 +37,9 @@ class PlantNotFoundScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     icon: Icon(Icons.close),
                   ),
                 ],
@@ -46,18 +48,11 @@ class PlantNotFoundScreen extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                "Name - " + plantDetails[0],
+                "Name - " + plantName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
               ),
               SizedBox(
                 height: 15,
-              ),
-              Text(
-                "Scientific Name - " + "plant name",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-              ),
-              SizedBox(
-                height: 20,
               ),
               Text(
                 "*the plant is currently unavailable.",

@@ -1,15 +1,22 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:greenroots/Screens/ErrorScreen/7_error.dart';
+import 'package:greenroots/Screens/Login/login_screen.dart';
 
 import 'package:greenroots/components/rectangular_input_field.dart';
 import 'package:greenroots/components/rectangular_password_field.dart';
+import 'package:greenroots/components/snackBar.dart';
 
 import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/login_credentials.dart';
 import 'package:greenroots/models/login_insert.dart';
+import 'package:greenroots/models/user_device_token_insert.dart';
+import 'package:greenroots/services/fcm_notification_device_token.dart';
 import 'package:greenroots/services/login_service.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'background.dart';
 import 'package:greenroots/components/rounded_button.dart';
@@ -31,12 +38,24 @@ class _BodyState extends State<Body> {
   LoginService get loginService => GetIt.I<LoginService>();
   APIResponse<LoginCredentials>? _apiResponse;
   bool _isLoading = false;
+  String deviceToken = "";
+  String accessToken = "";
+
+  FCMNotificationService get fcmDeviceToken =>
+      GetIt.I<FCMNotificationService>();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> getDeviceTokenForNotification() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    final token = await _fcm.getToken();
+    deviceToken = token.toString();
+    // print(token.toString());
   }
 
   @override
@@ -128,10 +147,18 @@ class _BodyState extends State<Body> {
                           );
                           final result =
                               await loginService.loginUser(loginData);
+
+                          //changed for login error checking
+                          if (result.data != null) {
+                            accessToken = result.data!.token;
+                          }
+
+                          getDeviceTokenForNotification();
                           setState(() {
                             showSpinner = false;
                           });
-                          if (result.error == true) {
+                          if (result.error == true &&
+                              result.errorMessage == 'unauthorized') {
                             // print(result.errorMessage);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -145,8 +172,30 @@ class _BodyState extends State<Body> {
                                 backgroundColor: Colors.red,
                               ),
                             );
+                          } else if (result.error == true &&
+                              result.errorMessage == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CustomSnackBar.buildSnackBar("Server error!!"));
                           } else {
-                            Navigator.pushNamed(context, '/home');
+                            // jwt token
+                            final String accessTokenAPI = accessToken;
+                            // print(accessTokenAPI);
+                            await LoginService.storage
+                                .write(key: "token", value: accessTokenAPI);
+                            FCMNotificationService.token =
+                                await LoginService.getToken();
+
+                            //fcm device token
+                            final token =
+                                UserDeviceTokenInsert(token: deviceToken);
+                            final result = await fcmDeviceToken
+                                .registerUserDeviceToken(token);
+                            if (result.error == true) {
+                              print(
+                                  "error occured after login but before device token");
+                            } else {
+                              Navigator.pushNamed(context, '/home');
+                            }
                           }
                         }
                       }),

@@ -1,8 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:greenroots/constants.dart';
+import 'package:greenroots/notificationService/local_notification_service.dart';
 import 'package:greenroots/route_generator.dart';
 import 'package:greenroots/services/cart_service.dart';
+import 'package:greenroots/services/fcm_notification_device_token.dart';
 import 'package:greenroots/services/login_service.dart';
 import 'package:greenroots/services/plant_scanner_service.dart';
 import 'package:greenroots/services/plants_service.dart';
@@ -15,10 +19,20 @@ void setupLocator() {
   GetIt.I.registerLazySingleton(() => PlantsService());
   GetIt.I.registerLazySingleton(() => CartService());
   GetIt.I.registerLazySingleton(() => PlantScannerService());
+  GetIt.I.registerLazySingleton(() => FCMNotificationService());
 }
 
-void main() {
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
+
+void main() async {
   setupLocator();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  LocalNotificationService.initialize();
   runApp(MyApp());
 }
 
@@ -44,7 +58,7 @@ class MyApp extends StatelessWidget {
                 primaryColor: kPrimaryColor,
                 scaffoldBackgroundColor: Colors.white,
                 fontFamily: 'Poppins'),
-            initialRoute: '/home',
+            initialRoute: '/',
             onGenerateRoute: RouteGenerator.generateRoute,
           );
         });

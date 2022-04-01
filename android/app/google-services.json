@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "977610235593",
+    "project_id": "greenroots-bb65c",
+    "storage_bucket": "greenroots-bb65c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977610235593:android:0efe117ecd566d02b27718",
+        "android_client_info": {
+          "package_name": "com.example.greenroots"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977610235593-42e8c78c5drfkhoet6921lgs6ffvoik0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJoHMpINGl_ay1cy0i3D7OM1OaLHGT_4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977610235593-42e8c78c5drfkhoet6921lgs6ffvoik0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

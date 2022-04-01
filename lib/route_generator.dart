@@ -7,6 +7,7 @@ import 'package:greenroots/Screens/Checkout/checkout_screen.dart';
 import 'package:greenroots/Screens/Home/home_screen.dart';
 import 'package:greenroots/Screens/Login/login_screen.dart';
 import 'package:greenroots/Screens/MyPlants/my_plants_screen.dart';
+import 'package:greenroots/Screens/OTP/otp_screen.dart';
 import 'package:greenroots/Screens/PlantDetails/plant_details_screen.dart';
 import 'package:greenroots/Screens/PlantNotFound/plant_not_found.dart';
 import 'package:greenroots/Screens/Signup/signup_screen.dart';
@@ -23,6 +24,14 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case '/signUp':
         return MaterialPageRoute(builder: (_) => SignUpScreen());
+      // case '/home':
+      //   if (args is String) {
+      //     return MaterialPageRoute(
+      //         builder: (_) => HomeScreen(
+      //               userEmail: args,
+      //             ));
+      //   }
+      //   return _errorRoute();
       case '/home':
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case '/plantDetails':
@@ -59,11 +68,18 @@ class RouteGenerator {
         return _errorRoute();
       case '/myPlants':
         return MaterialPageRoute(builder: (_) => MyPlantsScreen());
+      case '/otpScreen':
+        if (args is Map<String, dynamic>) {
+          return MaterialPageRoute(
+            builder: (_) => OTPScreen(userData: args),
+          );
+        }
+        return _errorRoute();
       case '/plantNotFound':
-        if (args is List<String>) {
+        if (args is String) {
           return MaterialPageRoute(
             builder: (_) => PlantNotFoundScreen(
-              plantDetails: args,
+              plantName: args,
             ),
           );
         }

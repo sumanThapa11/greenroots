@@ -49,6 +49,9 @@ class _BodyState extends State<Body> {
 
     isSuitable();
     plantService.getPlant(widget.plantId).then((response) {
+      // setState(() {
+      //   _showSpinner = false;
+      // });
       if (response.error) {
         errorMessage = response.errorMessage ?? 'An error occurred';
       }

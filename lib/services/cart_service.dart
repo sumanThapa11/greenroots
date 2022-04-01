@@ -5,14 +5,15 @@ import 'package:greenroots/models/cart_item_insert.dart';
 import 'package:greenroots/models/order_insert.dart';
 import 'package:greenroots/models/plant_order_insert.dart';
 import 'package:greenroots/models/users_cart_items.dart';
+import 'package:greenroots/services/fcm_notification_device_token.dart';
 import 'package:http/http.dart' as http;
 
 class CartService {
   static const API = 'http://10.0.2.2:8000/api/';
-  static const headers = {
+  static String? token = FCMNotificationService.token;
+  static final headers = {
     'Content-Type': 'application/json',
-    'Authorization':
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ4MjAxNjk1LCJpYXQiOjE2NDgxOTIwOTUsImp0aSI6ImQ2Mzg3NWYyNjExMTRjMjRhOWUzMTFiM2U3OGU3OGIzIiwidXNlcl9pZCI6Mn0.VXLX0GR4SKLOJQmie-hjkS9L1N949qIS-b4IB7EGgIo'
+    'Authorization': 'Bearer $token'
   };
 
   Future<APIResponse<bool>> createCart() {

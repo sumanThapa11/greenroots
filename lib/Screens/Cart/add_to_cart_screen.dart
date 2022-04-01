@@ -36,16 +36,16 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
       backgroundColor: Colors.grey,
       body: Center(
         child: Container(
-          width: size.width / 1.5,
-          height: size.height / 2.2,
+          width: size.width / 1.4,
+          height: size.height / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
             color: Colors.white,
           ),
-          margin: EdgeInsets.all(25),
-          padding: EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+          margin: EdgeInsets.all(20),
+          padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -108,7 +108,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                   Text("Total Price"),
                   Container(
                     height: 40,
-                    width: 150,
+                    width: size.width / 2.5,
                     alignment: Alignment.center,
                     color: Colors.grey.shade200,
                     child: Text(

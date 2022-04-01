@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:greenroots/components/rounded_back_button.dart';
@@ -5,9 +7,11 @@ import 'package:greenroots/Screens/Signup/components/background.dart';
 import 'package:greenroots/components/rectangular_input_field.dart';
 import 'package:greenroots/components/rectangular_password_field.dart';
 import 'package:greenroots/components/rounded_button.dart';
+import 'package:greenroots/components/snackBar.dart';
 import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/register_insert.dart';
 import 'package:greenroots/services/login_service.dart';
+import 'package:http/http.dart' as http;
 
 class Body extends StatefulWidget {
   @override
@@ -23,6 +27,7 @@ class _BodyState extends State<Body> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  String verifyCode = "";
 
   bool _nameValidate = false;
   bool _emailValidate = false;
@@ -32,6 +37,14 @@ class _BodyState extends State<Body> {
   bool _confirmPasswordValidate = false;
 
   bool showSpinner = false;
+
+  String key = '8582e2ca8f0ae8a36bd9aca7fb740865-62916a6c-9f202c92';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +87,7 @@ class _BodyState extends State<Body> {
                   RectangularInputField(
                     controller: _emailController,
                     hintText: "Email",
+                    keyBoardType: TextInputType.emailAddress,
                     icon: Icons.email_rounded,
                     onChanged: (value) {},
                     errorText: _emailValidate ? 'Empty field' : null,
@@ -88,6 +102,7 @@ class _BodyState extends State<Body> {
                   RectangularInputField(
                     controller: _phoneController,
                     hintText: "Phone",
+                    keyBoardType: TextInputType.number,
                     icon: Icons.phone,
                     onChanged: (value) {},
                     errorText: _phoneValidate ? 'Empty field' : null,
@@ -139,6 +154,12 @@ class _BodyState extends State<Body> {
                                 : _confirmPasswordValidate = false;
                           });
                         });
+                      } else if (_passwordController.text !=
+                          _confirmPasswordController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          CustomSnackBar.buildSnackBar(
+                              "Password fields do not match"),
+                        );
                       } else {
                         setState(() {
                           showSpinner = true;
@@ -165,41 +186,26 @@ class _BodyState extends State<Body> {
                           confirmPassword: _confirmPasswordController.text,
                         );
 
-                        result = await loginService.registerUser(user);
-
+                        result = await loginService
+                            .sendEmailToken(_emailController.text);
                         setState(() {
                           showSpinner = false;
                         });
+                        if (!result.error) {
+                          String otp = result.data;
+                          print(otp);
+                          Map<String, dynamic> userData = {
+                            "user": user,
+                            "otp": otp
+                          };
 
-                        final title = 'Submitted';
-                        final text = result.error
-                            ? (result.errorMessage ?? 'An error occured')
-                            : 'User is created';
-
-                        showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                            title: Text(title),
-                            content: Text(text),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('OK'),
-                              )
-                            ],
-                          ),
-                        ).then((data) {
-                          if (result.data) {
-                            Navigator.of(context).pop();
-                          }
-                        });
+                          Navigator.pushNamed(context, '/otpScreen',
+                              arguments: userData);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            CustomSnackBar.buildSnackBar("An error occurred"),
+                          );
+                        }
                       }
                     },
                   )

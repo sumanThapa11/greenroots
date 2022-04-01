@@ -78,10 +78,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
         );
       } else if (_apiResponse!.errorMessage == 'negative') {
-        List<String> plantDetails = [];
-        plantDetails[0] = _apiResponse!.data!.plantName;
-        Navigator.of(context)
-            .pushNamed('/plantNotFound', arguments: plantDetails);
+        String plantName;
+        plantName = _apiResponse!.data!.plantName;
+        Navigator.of(context).pushNamed('/plantNotFound', arguments: plantName);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(kErrorSnackBar);
       }

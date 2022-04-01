@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -29,6 +30,10 @@ class _BodyState extends State<Body> {
   void initState() {
     _fetchCategoryList();
     super.initState();
+    // FirebaseMessaging.instance.getToken().then((newToken) {
+    //   print("fcm token");
+    //   print(newToken);
+    // });
   }
 
   _fetchCategoryList() async {

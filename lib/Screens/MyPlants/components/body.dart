@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:greenroots/Screens/ErrorScreen/connection_failed.dart';
 import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/plant_list.dart';
@@ -45,6 +46,9 @@ class _BodyState extends State<Body> {
       builder: (_) {
         if (_showSpinner) {
           return kCircularProgressIndicator;
+        }
+        if (_apiResponse.data == null) {
+          return ConnectionFailedScreen();
         }
         if (_apiResponse.data!.length == 0) {
           return Center(
