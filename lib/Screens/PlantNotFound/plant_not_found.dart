@@ -13,7 +13,7 @@ class PlantNotFoundScreen extends StatelessWidget {
       body: Center(
         child: Container(
           width: size.width / 1.3,
-          height: size.height / 2.7,
+          height: size.height / 4,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(10),
@@ -45,14 +45,14 @@ class PlantNotFoundScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: size.height / 30,
               ),
               Text(
                 "Name - " + plantName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
               ),
               SizedBox(
-                height: 15,
+                height: size.height / 35,
               ),
               Text(
                 "*the plant is currently unavailable.",

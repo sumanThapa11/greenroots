@@ -40,6 +40,7 @@ class _BodyState extends State<Body> {
   bool _isLoading = false;
   String deviceToken = "";
   String accessToken = "";
+  String refreshToken = "";
 
   FCMNotificationService get fcmDeviceToken =>
       GetIt.I<FCMNotificationService>();
@@ -55,7 +56,8 @@ class _BodyState extends State<Body> {
     final FirebaseMessaging _fcm = FirebaseMessaging.instance;
     final token = await _fcm.getToken();
     deviceToken = token.toString();
-    // print(token.toString());
+    print("deviceToken");
+    print(token.toString());
   }
 
   @override
@@ -81,19 +83,19 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   SizedBox(
-                    width: size.width * 0.6,
+                    width: size.width * 0.65,
                     child: TextLiquidFill(
                       text: "greenroots",
                       waveColor: kPrimaryColor,
                       boxBackgroundColor: Colors.white,
                       textStyle: TextStyle(
-                        fontSize: 43,
+                        fontSize: 40,
                         fontWeight: FontWeight.w800,
                       ),
-                      boxHeight: 81,
+                      boxHeight: size.height / 5,
                     ),
                   ),
                   Text(
@@ -110,13 +112,14 @@ class _BodyState extends State<Body> {
                     controller: _emailController,
                     hintText: "Your Email",
                     onChanged: (value) {},
-                    errorText: _emailValidate ? 'Empty field' : null,
+                    errorText: _emailValidate ? 'email is required' : null,
                   ),
                   RectangularPasswordField(
                     controller: _passwordController,
                     hintText: "Password",
                     onChanged: (value) {},
-                    errorText: _passwordValidate ? 'Empty field' : null,
+                    errorText:
+                        _passwordValidate ? 'password is required' : null,
                   ),
                   SizedBox(
                     height: size.height * 0.10,
@@ -151,6 +154,7 @@ class _BodyState extends State<Body> {
                           //changed for login error checking
                           if (result.data != null) {
                             accessToken = result.data!.token;
+                            refreshToken = result.data!.refreshToken;
                           }
 
                           getDeviceTokenForNotification();
@@ -179,11 +183,19 @@ class _BodyState extends State<Body> {
                           } else {
                             // jwt token
                             final String accessTokenAPI = accessToken;
+                            final String refreshTokenAPI = refreshToken;
+                            // print("accessToken");
                             // print(accessTokenAPI);
                             await LoginService.storage
                                 .write(key: "token", value: accessTokenAPI);
+                            await LoginService.storage.write(
+                                key: "refreshToken", value: refreshTokenAPI);
+
                             FCMNotificationService.token =
-                                await LoginService.getToken();
+                                await LoginService.getToken("token");
+
+                            FCMNotificationService.refreshToken =
+                                await LoginService.getToken("refreshToken");
 
                             //fcm device token
                             final token =

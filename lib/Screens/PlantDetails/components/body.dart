@@ -33,7 +33,7 @@ class _BodyState extends State<Body> {
   late PlantList plant;
   Map<String, dynamic> plantForCart = {};
   double? currentTemperature;
-  String? isSuitableForLocation;
+  String? isSuitableForLocation = "getting info....";
   bool _showSpinner = false;
   late APIResponse _apiResponse;
   bool isSuitableCheck = false;
@@ -49,20 +49,21 @@ class _BodyState extends State<Body> {
 
     isSuitable();
     plantService.getPlant(widget.plantId).then((response) {
-      // setState(() {
-      //   _showSpinner = false;
-      // });
+      setState(() {
+        _showSpinner = false;
+      });
       if (response.error) {
         errorMessage = response.errorMessage ?? 'An error occurred';
       }
       plant = response.data!;
       plantForCart = plant.toJson();
 
-      print(double.parse(plant.suitableTemperature.substring(0, 2)) > 0);
+      // print(double.parse(plant.suitableTemperature.substring(0, 2)) > 0);
     });
   }
 
   void isSuitable() async {
+    print("ok");
     double temp = await getLocationTemperature();
     double minTemp = double.parse(plant.suitableTemperature.substring(0, 2));
     double maxTemp = double.parse(plant.suitableTemperature.substring(3));
@@ -109,8 +110,8 @@ class _BodyState extends State<Body> {
     _apiResponse = await plantService.getTemperature(
         position.latitude, position.longitude);
     currentTemperature = _apiResponse.data!;
-    print('temp');
-    print(currentTemperature);
+    // print('temp');
+    // print(currentTemperature);
     return currentTemperature!;
   }
 

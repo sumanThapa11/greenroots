@@ -47,6 +47,17 @@ class _BodyState extends State<Body> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Background(
@@ -126,6 +137,8 @@ class _BodyState extends State<Body> {
                     text: "Sign Up",
                     press: () async {
                       final result;
+                      RegExp regexp =
+                          RegExp(r'^(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                       if (_nameController.text.isEmpty ||
                           _emailController.text.isEmpty ||
                           _addressController.text.isEmpty ||
@@ -159,6 +172,15 @@ class _BodyState extends State<Body> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           CustomSnackBar.buildSnackBar(
                               "Password fields do not match"),
+                        );
+                      } else if (_phoneController.text.length != 10) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          CustomSnackBar.buildSnackBar("Invalid phone number"),
+                        );
+                      } else if (!regexp.hasMatch(_passwordController.text)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          CustomSnackBar.buildSnackBar(
+                              "Password must have at least 8 characters with one digit and a special character."),
                         );
                       } else {
                         setState(() {

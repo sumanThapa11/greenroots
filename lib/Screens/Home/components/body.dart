@@ -23,6 +23,7 @@ class _BodyState extends State<Body> {
   PlantsService get service => GetIt.I<PlantsService>();
   late APIResponse<List<CategoryList>> _apiResponseCategory;
   late APIResponse<List<PlantList>> _apiResponsePlant;
+  List<PlantList>? plantList;
 
   bool _showSpinner = false;
 
@@ -44,7 +45,8 @@ class _BodyState extends State<Body> {
     _apiResponseCategory = await service.getCategoryList();
 
     _apiResponsePlant = await service.getPlantsList();
-    print(_apiResponseCategory.data![1].id);
+    plantList = (_apiResponsePlant.data!).reversed.toList();
+    print(_apiResponsePlant.data!);
 
     setState(() {
       _showSpinner = false;
@@ -93,29 +95,26 @@ class _BodyState extends State<Body> {
                 ),
                 TitleWithPadding(text: "Recent additions"),
                 Container(
-                  height: 290,
+                  height: size.height / 2.20,
                   child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return PlantCard(
-                          height: size.height / 8,
-                          image:
-                              imageUrl + _apiResponsePlant.data![index].image,
-                          title: _apiResponsePlant.data![index].name,
-                          priceOrProduct: "NPR " +
-                              _apiResponsePlant.data![index].unitPrice
-                                  .toString(),
+                          height: size.height / 9.0,
+                          image: imageUrl + plantList![index].image,
+                          title: plantList![index].name,
+                          priceOrProduct:
+                              "NPR " + plantList![index].unitPrice.toString(),
                           press: () {
                             Navigator.of(context).pushNamed('/plantDetails',
-                                arguments: _apiResponsePlant.data![index].id
-                                    .toString());
+                                arguments: plantList![index].id.toString());
                           },
                           width: 150,
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) =>
                           const Divider(),
-                      itemCount: _apiResponsePlant.data!.length),
+                      itemCount: 5),
                 ),
               ],
             ),

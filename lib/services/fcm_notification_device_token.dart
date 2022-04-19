@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/user_device_token_insert.dart';
 import 'package:greenroots/services/login_service.dart';
@@ -7,7 +8,8 @@ import 'package:http/http.dart' as http;
 
 class FCMNotificationService {
   static String? token;
-  static const API = 'http://10.0.2.2:8000/api/';
+  static String? refreshToken;
+  // static const API = 'http://10.0.2.2:8000/api/';
   static final headerAuth = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token',

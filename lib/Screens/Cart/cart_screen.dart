@@ -4,6 +4,7 @@ import 'package:greenroots/Screens/Cart/components/cart_item_delete_alert.dart';
 import 'package:greenroots/Screens/ErrorScreen/7_error.dart';
 import 'package:greenroots/Screens/ErrorScreen/connection_failed.dart';
 import 'package:greenroots/components/rounded_back_button.dart';
+import 'package:greenroots/components/snackBar.dart';
 import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/users_cart_items.dart';
 import 'package:greenroots/services/cart_service.dart';
@@ -57,11 +58,11 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Builder(
         builder: (_) {
-          if (usersCartItem == null) {
-            return Error2Screen();
-          }
           if (showSpinner) {
             return kCircularProgressIndicator;
+          }
+          if (usersCartItem == null) {
+            return Error2Screen();
           }
           if (emptyCart == 'emptyCart') {
             return Center(
@@ -88,22 +89,27 @@ class _CartScreenState extends State<CartScreen> {
                           var message;
                           if (deleteCartItem != null &&
                               deleteCartItem.data == true) {
-                            message = 'The item was deleted successfully';
+                            // message = 'The item was deleted successfully';
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CustomSnackBar.buildSnackBar(
+                                    "The item was deleted successfully"));
                           } else {
                             message = deleteCartItem.errorMessage ??
                                 'An error occurred';
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(kErrorSnackBar);
                           }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                message,
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w500),
-                              ),
-                              duration: Duration(seconds: 4),
-                              backgroundColor: Color(0xFF32CD32),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text(
+                          //       message,
+                          //       style: TextStyle(
+                          //           fontSize: 12, fontWeight: FontWeight.w500),
+                          //     ),
+                          //     duration: Duration(seconds: 5),
+                          //     backgroundColor: Color(0xFF32CD32),
+                          //   ),
+                          // );
                           return deleteCartItem.data ?? false;
                         }
 

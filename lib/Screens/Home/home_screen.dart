@@ -1,10 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:greenroots/Screens/Home/components/body.dart';
 import 'package:greenroots/components/bottom_nav_bar.dart';
+import 'package:greenroots/components/snackBar.dart';
 import 'package:greenroots/constants.dart';
 import 'package:greenroots/notificationService/local_notification_service.dart';
+import 'package:greenroots/services/fcm_notification_device_token.dart';
+import 'package:greenroots/services/login_service.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -104,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+LoginService get loginService => GetIt.I<LoginService>();
 Widget buildMenuItems(BuildContext context) {
   return Container(
     padding: const EdgeInsets.all(15),
@@ -144,7 +149,23 @@ Widget buildMenuItems(BuildContext context) {
             "Logout",
             style: TextStyle(color: kPrimaryColor),
           ),
-          onTap: () {},
+          onTap: () async {
+            if (FCMNotificationService.refreshToken == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  CustomSnackBar.buildSnackBar("An error occurred"));
+            } else {
+              final result = await loginService
+                  .logOutUser(FCMNotificationService.refreshToken!);
+
+              print(FCMNotificationService.refreshToken);
+              if (result.data! != true) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    CustomSnackBar.buildSnackBar("An error occurred"));
+              } else {
+                Navigator.pushNamed(context, '/');
+              }
+            }
+          },
         ),
       ],
     ),

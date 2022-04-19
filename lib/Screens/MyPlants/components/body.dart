@@ -19,7 +19,8 @@ class _BodyState extends State<Body> {
   late APIResponse<List<PlantList>> _apiResponse;
   bool _showSpinner = false;
 
-  String imageUrl = "http://10.0.2.2:8000";
+  // String imageUrl = "http://10.0.2.2:8000";
+  // String imageUrl = "http://192.168.1.69:8000";
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _BodyState extends State<Body> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            imageUrl + _apiResponse.data![index].image,
+                            kImageUrl + _apiResponse.data![index].image,
                           ),
                         ),
                       ),

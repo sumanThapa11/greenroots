@@ -1,20 +1,31 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/login_credentials.dart';
 import 'package:greenroots/models/login_insert.dart';
 import 'package:greenroots/models/register_insert.dart';
 import 'package:greenroots/models/user_device_token_insert.dart';
+import 'package:greenroots/services/fcm_notification_device_token.dart';
 import 'package:http/http.dart' as http;
 
 class LoginService {
   static final storage = FlutterSecureStorage();
-  static const API = 'http://10.0.2.2:8000/api/';
+  // static final SecureStorage storage = SecureStorage();
+
+  // static const API = 'http://10.0.2.2:8000/api/';
   static const headers = {'Content-Type': 'application/json'};
 
-  static Future<String?> getToken() async {
-    String? data = await storage.read(key: "token");
+  static String? token = FCMNotificationService.token;
+
+  static final tokenForLogout = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $token'
+  };
+
+  static Future<String?> getToken(String key) async {
+    String? data = await storage.read(key: key);
     print(data);
     return data;
   }
@@ -83,5 +94,21 @@ class LoginService {
           error: true, errorMessage: 'An error occurred');
     }).catchError((_) => APIResponse<String>(
             error: true, errorMessage: 'An error occurred'));
+  }
+
+  Future<APIResponse<bool>> logOutUser(String refreshToken) {
+    return http
+        .post(
+      Uri.parse(API + 'logout/'),
+      headers: tokenForLogout,
+      body: jsonEncode({'refresh_token': refreshToken}),
+    )
+        .then((data) {
+      if (data.statusCode == 205) {
+        return APIResponse<bool>(data: true);
+      }
+      return APIResponse<bool>(error: true, errorMessage: 'An error occurred');
+    }).catchError((_) =>
+            APIResponse<bool>(error: true, errorMessage: 'An error occurred'));
   }
 }

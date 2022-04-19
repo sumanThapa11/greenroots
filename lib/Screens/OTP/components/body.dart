@@ -34,7 +34,7 @@ class _BodyState extends State<Body> {
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.w500),
               ),
               Text(
-                "We sent your code to test@gmail.com",
+                "We sent your code to " + widget.userData['user'].email,
                 style: TextStyle(
                   fontSize: 15,
                 ),

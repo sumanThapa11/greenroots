@@ -11,6 +11,7 @@ import 'package:greenroots/Screens/OTP/otp_screen.dart';
 import 'package:greenroots/Screens/PlantDetails/plant_details_screen.dart';
 import 'package:greenroots/Screens/PlantNotFound/plant_not_found.dart';
 import 'package:greenroots/Screens/Signup/signup_screen.dart';
+import 'package:greenroots/constants.dart';
 import 'package:greenroots/main.dart';
 import 'package:greenroots/models/plant_list.dart';
 import 'package:greenroots/models/users_cart_items.dart';
@@ -94,6 +95,7 @@ class RouteGenerator {
       return Scaffold(
         appBar: AppBar(
           title: Text('Error'),
+          backgroundColor: kPrimaryColor,
         ),
         body: Center(
           child: Text('Error'),

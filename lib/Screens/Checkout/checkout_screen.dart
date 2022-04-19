@@ -180,7 +180,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               onPressed: () async {
                 if (deliveryAddressController.text.isEmpty) {
                   const emptyAddress = SnackBar(
-                    content: Text('Please enter address'),
+                    content: Text('Please enter delivery address'),
+                    backgroundColor: Colors.red,
                   );
                   ScaffoldMessenger.of(context).showSnackBar(emptyAddress);
                 } else {

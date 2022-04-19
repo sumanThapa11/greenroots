@@ -1,16 +1,19 @@
 import 'dart:convert';
 
+import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/cart_item_insert.dart';
 import 'package:greenroots/models/order_insert.dart';
 import 'package:greenroots/models/plant_order_insert.dart';
 import 'package:greenroots/models/users_cart_items.dart';
 import 'package:greenroots/services/fcm_notification_device_token.dart';
+import 'package:greenroots/services/login_service.dart';
 import 'package:http/http.dart' as http;
 
 class CartService {
-  static const API = 'http://10.0.2.2:8000/api/';
+  // static const API = 'http://10.0.2.2:8000/api/';
   static String? token = FCMNotificationService.token;
+
   static final headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token'

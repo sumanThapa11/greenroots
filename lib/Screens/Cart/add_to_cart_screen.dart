@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:greenroots/components/snackBar.dart';
 import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/cart_item_insert.dart';
 import 'package:greenroots/models/category_list.dart';
@@ -163,11 +164,16 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                   fontSize: 12, fontWeight: FontWeight.w500),
                             ),
                             duration: Duration(seconds: 4),
-                            backgroundColor: Color(0xFF32CD32),
+                            backgroundColor: Colors.red,
                           ),
                         );
                         Navigator.pop(context);
                       }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        CustomSnackBar.buildSnackBar(
+                            "Please mention plant quantity"),
+                      );
                     }
                   },
                   child: Text(

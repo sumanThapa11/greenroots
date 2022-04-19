@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/plant_scanner_image_insert.dart';
 import 'package:greenroots/models/plant_scanner_response.dart';
@@ -9,7 +10,7 @@ import 'package:greenroots/models/plant_scanner_response.dart';
 import 'package:http/http.dart' as http;
 
 class PlantScannerService {
-  static const API = 'http://192.168.1.69:8000/api/';
+  // static const API = 'http://192.168.1.69:8000/api/';
   // static const API = 'http://10.0.2.2:8000/api/';
   static const headers = {
     'Content-Type': 'application/json',

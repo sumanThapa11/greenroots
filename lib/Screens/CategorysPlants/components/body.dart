@@ -21,7 +21,7 @@ class _BodyState extends State<Body> {
   String? errorMessage;
   late CategoryList category;
 
-  String imageUrl = "http://192.168.1.69:8000";
+  // String imageUrl = "http://192.168.1.69:8000";
 
   bool _showSpinner = false;
 
