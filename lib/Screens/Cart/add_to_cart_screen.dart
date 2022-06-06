@@ -20,13 +20,20 @@ class AddToCartScreen extends StatefulWidget {
 class _AddToCartScreenState extends State<AddToCartScreen> {
   CartService get cartService => GetIt.I<CartService>();
 
-  final quantityController = TextEditingController(text: '0');
+  final quantityController = TextEditingController(text: '1');
   double totalPrice = 0;
 
   @override
   void dispose() {
     quantityController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    totalPrice = double.parse(widget.plant['unit_price']);
   }
 
   @override
@@ -97,7 +104,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                       });
                     } else {
                       setState(() {
-                        totalPrice = 0;
+                        totalPrice = double.parse(widget.plant['unit_price']);
                       });
                     }
                   },

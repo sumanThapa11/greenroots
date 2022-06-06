@@ -6,6 +6,7 @@ import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/login_credentials.dart';
 import 'package:greenroots/models/login_insert.dart';
 import 'package:greenroots/models/register_insert.dart';
+import 'package:greenroots/models/reset_password.dart';
 import 'package:greenroots/models/user_device_token_insert.dart';
 import 'package:greenroots/services/fcm_notification_device_token.dart';
 import 'package:http/http.dart' as http;
@@ -102,6 +103,40 @@ class LoginService {
       Uri.parse(API + 'logout/'),
       headers: tokenForLogout,
       body: jsonEncode({'refresh_token': refreshToken}),
+    )
+        .then((data) {
+      if (data.statusCode == 205) {
+        return APIResponse<bool>(data: true);
+      }
+      return APIResponse<bool>(error: true, errorMessage: 'An error occurred');
+    }).catchError((_) =>
+            APIResponse<bool>(error: true, errorMessage: 'An error occurred'));
+  }
+
+  Future<APIResponse<bool>> searchUser(String email) {
+    return http
+        .post(
+      Uri.parse(API + 'search_user/'),
+      headers: headers,
+      body: jsonEncode({'email': email}),
+    )
+        .then((data) {
+      if (data.statusCode == 200) {
+        return APIResponse<bool>(data: true);
+      } else if (data.statusCode == 204) {
+        return APIResponse<bool>(error: true, errorMessage: 'notFound');
+      }
+      return APIResponse<bool>(error: true, errorMessage: 'An error occurred');
+    }).catchError((_) =>
+            APIResponse<bool>(error: true, errorMessage: 'An error occurred'));
+  }
+
+  Future<APIResponse<bool>> resetPassword(ResetPassword userDetails) {
+    return http
+        .post(
+      Uri.parse(API + 'reset_password/'),
+      headers: headers,
+      body: jsonEncode(userDetails.toJson()),
     )
         .then((data) {
       if (data.statusCode == 205) {

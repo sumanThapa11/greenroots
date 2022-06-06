@@ -54,7 +54,7 @@ class _BodyState extends State<Body> {
                 text: "Continue",
                 press: () async {
                   if (otp == widget.userData['otp']) {
-                    print("ok cha ta");
+                    // print("ok ");
 
                     final result = await loginService
                         .registerUser(widget.userData['user']);
@@ -81,7 +81,7 @@ class _BodyState extends State<Body> {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pushNamed('/');
                             },
                             child: Text('OK'),
                           )

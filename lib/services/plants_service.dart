@@ -5,6 +5,7 @@ import 'package:greenroots/constants.dart';
 import 'package:greenroots/models/api_response.dart';
 import 'package:greenroots/models/category_list.dart';
 import 'package:greenroots/models/plant_list.dart';
+import 'package:greenroots/models/plant_scanner_response.dart';
 import 'package:greenroots/models/users_plant_insert.dart';
 import 'package:greenroots/services/fcm_notification_device_token.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +17,10 @@ class PlantsService {
   static final headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token'
+  };
+
+  static final contentType = {
+    'Content-Type': 'application/json',
   };
 
   Future<APIResponse<List<CategoryList>>> getCategoryList() {
@@ -153,5 +158,21 @@ class PlantsService {
       (_) =>
           APIResponse<double>(error: true, errorMessage: 'An error occurred'),
     );
+  }
+
+  Future<APIResponse<PlantScannerResponse>> searchPlant(String plant) {
+    return http
+        .post(Uri.parse(API + 'search_plant/'),
+            headers: contentType, body: json.encode({'plant_name': plant}))
+        .then((data) {
+      if (data.statusCode == 200) {
+        final jsonData = json.decode(data.body);
+        final plantDetails = PlantScannerResponse.fromJson(jsonData);
+        return APIResponse<PlantScannerResponse>(data: plantDetails);
+      }
+      return APIResponse<PlantScannerResponse>(
+          error: true, errorMessage: 'An error occurred');
+    }).catchError((_) => APIResponse<PlantScannerResponse>(
+            error: true, errorMessage: 'An error occurred'));
   }
 }

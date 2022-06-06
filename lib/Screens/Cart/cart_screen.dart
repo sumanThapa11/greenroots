@@ -93,6 +93,15 @@ class _CartScreenState extends State<CartScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 CustomSnackBar.buildSnackBar(
                                     "The item was deleted successfully"));
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return CartScreen();
+                                },
+                              ),
+                            );
                           } else {
                             message = deleteCartItem.errorMessage ??
                                 'An error occurred';

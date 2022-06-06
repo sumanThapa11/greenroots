@@ -3,6 +3,8 @@ import 'package:greenroots/Screens/Cart/add_to_cart_screen.dart';
 import 'package:greenroots/Screens/Cart/cart_screen.dart';
 import 'package:greenroots/Screens/CategorysPlants/categorys_plants_screen.dart';
 import 'package:greenroots/Screens/Checkout/checkout_screen.dart';
+import 'package:greenroots/Screens/ForgotPasswordOTP/forgot_password_otp.dart';
+import 'package:greenroots/Screens/Forgot_password/forgot_password_screen.dart';
 
 import 'package:greenroots/Screens/Home/home_screen.dart';
 import 'package:greenroots/Screens/Login/login_screen.dart';
@@ -58,6 +60,17 @@ class RouteGenerator {
         return _errorRoute();
       case '/cart':
         return MaterialPageRoute(builder: (_) => CartScreen());
+      case '/forgot_password':
+        return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
+      case '/forgot_password_otp':
+        if (args is Map<String, dynamic>) {
+          return MaterialPageRoute(
+              builder: (_) => ForgotPasswordOTPScreen(
+                    userData: args,
+                  ));
+        }
+        return _errorRoute();
+
       case '/checkout':
         if (args is UsersCartItem) {
           return MaterialPageRoute(

@@ -137,6 +137,7 @@ class _BodyState extends State<Body> {
                     text: "Sign Up",
                     press: () async {
                       final result;
+                      final emailResult;
                       RegExp regexp =
                           RegExp(r'^(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                       if (_nameController.text.isEmpty ||
@@ -186,46 +187,60 @@ class _BodyState extends State<Body> {
                         setState(() {
                           showSpinner = true;
                         });
-                        String firstName;
-                        String lastName;
 
-                        // providing blank text if the users supply first name only
-                        if (_nameController.text.split(" ").length > 1) {
-                          firstName = _nameController.text.split(" ")[0];
-                          lastName = _nameController.text.split(" ")[1];
+                        emailResult = await loginService
+                            .searchUser(_emailController.text);
+                        if (emailResult.error == true &&
+                            emailResult.errorMessage == 'notFound') {
+                          String firstName;
+                          String lastName;
+
+                          // providing blank text if the users supply first name only
+                          if (_nameController.text.split(" ").length > 1) {
+                            firstName = _nameController.text.split(" ")[0];
+                            lastName = _nameController.text.split(" ")[1];
+                          } else {
+                            firstName = _nameController.text.split(" ")[0];
+                            lastName = "------";
+                          }
+
+                          final user = RegisterInsert(
+                            email: _emailController.text,
+                            firstName: firstName,
+                            lastName: lastName,
+                            address: _addressController.text,
+                            phone: _phoneController.text,
+                            password: _passwordController.text,
+                            confirmPassword: _confirmPasswordController.text,
+                          );
+
+                          result = await loginService
+                              .sendEmailToken(_emailController.text);
+                          setState(() {
+                            showSpinner = false;
+                          });
+                          if (!result.error) {
+                            String otp = result.data;
+                            print(otp);
+                            Map<String, dynamic> userData = {
+                              "user": user,
+                              "otp": otp
+                            };
+
+                            Navigator.pushNamed(context, '/otpScreen',
+                                arguments: userData);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              CustomSnackBar.buildSnackBar("An error occurred"),
+                            );
+                          }
                         } else {
-                          firstName = _nameController.text.split(" ")[0];
-                          lastName = "------";
-                        }
-
-                        final user = RegisterInsert(
-                          email: _emailController.text,
-                          firstName: firstName,
-                          lastName: lastName,
-                          address: _addressController.text,
-                          phone: _phoneController.text,
-                          password: _passwordController.text,
-                          confirmPassword: _confirmPasswordController.text,
-                        );
-
-                        result = await loginService
-                            .sendEmailToken(_emailController.text);
-                        setState(() {
-                          showSpinner = false;
-                        });
-                        if (!result.error) {
-                          String otp = result.data;
-                          print(otp);
-                          Map<String, dynamic> userData = {
-                            "user": user,
-                            "otp": otp
-                          };
-
-                          Navigator.pushNamed(context, '/otpScreen',
-                              arguments: userData);
-                        } else {
+                          setState(() {
+                            showSpinner = false;
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
-                            CustomSnackBar.buildSnackBar("An error occurred"),
+                            CustomSnackBar.buildSnackBar(
+                                "The user already exists."),
                           );
                         }
                       }

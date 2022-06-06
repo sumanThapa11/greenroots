@@ -22,10 +22,10 @@ const SnackBar kErrorSnackBar = SnackBar(
   backgroundColor: Colors.red,
 );
 
-// const String kImageUrl = "http://192.168.1.69:8000";
-const String kImageUrl = "http://10.0.2.2:8000";
+const String kImageUrl = "http://192.168.1.74:8000";
+// const String kImageUrl = "http://10.0.2.2:8000";
 // const String kImageUrl = "http://100.64.224.33:8000";
 
-// const String API = "http://192.168.1.69:8000/api/";
+const String API = "http://192.168.1.74:8000/api/";
 // const String API = "http://100.64.224.33:8000/api/";
-const String API = "http://10.0.2.2:8000/api/";
+// const String API = "http://10.0.2.2:8000/api/";

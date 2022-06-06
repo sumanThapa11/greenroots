@@ -74,7 +74,7 @@ class _BodyState extends State<Body> {
             : Column(
                 children: [
                   Container(
-                    height: 225,
+                    height: size.height / 2.8,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage("assets/images/login_plant.png"),
@@ -83,20 +83,27 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: size.height / 50,
                   ),
-                  SizedBox(
-                    width: size.width * 0.65,
-                    child: TextLiquidFill(
-                      text: "greenroots",
-                      waveColor: kPrimaryColor,
-                      boxBackgroundColor: Colors.white,
-                      textStyle: TextStyle(
-                        fontSize: 40,
+                  // SizedBox(
+                  //   width: size.width * 0.65,
+                  //   child: TextLiquidFill(
+                  //     text: "greenroots",
+                  //     waveColor: kPrimaryColor,
+                  //     boxBackgroundColor: Colors.white,
+                  //     textStyle: TextStyle(
+                  //       fontSize: 40,
+                  //       fontWeight: FontWeight.w800,
+                  //     ),
+                  //     boxHeight: size.height / 5,
+                  //   ),
+                  // ),
+                  Text(
+                    "greenroots",
+                    style: TextStyle(
+                        fontSize: 45,
                         fontWeight: FontWeight.w800,
-                      ),
-                      boxHeight: size.height / 5,
-                    ),
+                        color: kPrimaryColor),
                   ),
                   Text(
                     "Login to your account",
@@ -120,6 +127,22 @@ class _BodyState extends State<Body> {
                     onChanged: (value) {},
                     errorText:
                         _passwordValidate ? 'password is required' : null,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: size.width / 2.2),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/forgot_password');
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: size.height * 0.10,
